@@ -15,17 +15,23 @@ input{
 
 button{
     margin-top: 1px;
-    border: none;
     border-radius: 2px;
     width: 100px;
     padding: 7px;
     background-color: #5f9341;
     color: white;
     font-weight: bold;
+    border: 1px solid #5f9341;
 }
 button:hover{
     background-color: #41981e;
     transition-duration: 0.5s;
+}
+
+#delete-btn{
+    background-color: white;
+    color: #5f9341;
+
 }
 
 ul{
