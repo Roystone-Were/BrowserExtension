@@ -1,52 +1,32 @@
-let myLeads = []
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"
+import { getDatabase,
+         ref,
+         push,
+         onValue ,
+         remove} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"
+
+const firebaseConfig ={
+    databaseURL: "https://link-saver-595b8-default-rtdb.asia-southeast1.firebasedatabase.app/"
+}
+const app = initializeApp(firebaseConfig)
+const database = getDatabase(app)
+const referenceInDB = ref(database, "leads")
+
 const list = document.getElementById("ul-el")
 const inputEl = document.getElementById("input-el")
 const saveInputButton = document.getElementById("input-btn")
 const deleteButton = document.getElementById("delete-btn")
-const saveTabButton = document.getElementById("tab-btn")
 
-const leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
-console.log(leadsFromLocalStorage)
+//click event function
+function render(leads){
+    list.innerHTML = ""
 
-//prevents data lose after refresh
-if(leadsFromLocalStorage){
-    myLeads =leadsFromLocalStorage
-    render()
-}
-
-const tabs= window.location.href
-//save button
-saveInputButton.addEventListener("click",render)
-
-//save tab button
-saveTabButton.addEventListener("click", function(){
-    myLeads.push(tabs)
-    localStorage.setItem("myLeads", JSON.stringify(myLeads))
-    render()
-})
-
-//delete button
-deleteButton.addEventListener("dblclick",function (){
-    localStorage.clear()
-    myLeads = []
-    render()
-})
-
-//click event listener function
-function render(){
-    myLeads.push(inputEl.value)
-
-    list.innerHTML= "" //prevents data duplicate after every render
-
-    //save to localStorage
-    localStorage.setItem("myLeads", JSON.stringify(myLeads))
-    // console.log(localStorage.getItem("myLeads"))
-
-    for (let i = 0; i < myLeads.length; i++) {
+    for (let i = 0; i < leads.length; i++) {
         let li = document.createElement("li")
         let a = document.createElement("a")
-        a.href = myLeads[i]
-        a.textContent = myLeads[i]
+        a.href = leads[i]
+        a.textContent = leads[i]
         a.target = "_blank"
 
         // Append the <a> to the <li>
@@ -58,3 +38,26 @@ function render(){
     // Clear the input field after saving
     inputEl.value = ""
 }
+
+
+onValue(referenceInDB,function (snapshot) {
+    const snapshotExist = snapshot.exists()
+    if (snapshotExist) {
+        const snapshotValue = snapshot.val()
+        const leads = Object.values(snapshotValue)
+        render(leads)
+    }
+
+})
+//save button
+saveInputButton.addEventListener("click",function (){
+    push(referenceInDB, inputEl.value)
+    inputEl.value = ""
+})
+
+//delete button
+deleteButton.addEventListener("dblclick",function (){
+    remove(referenceInDB)
+    list.innerHTML=''
+
+})

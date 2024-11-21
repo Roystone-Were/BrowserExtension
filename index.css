@@ -1,8 +1,13 @@
 body{
-    margin: 0;
+    margin: 0 auto;
     padding: 10px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    min-width: 300px;
+    max-width: 300px;
+}
+
+label{
+    color: #5f9341;
+    font-weight: bold;
 }
 
 input{
@@ -16,7 +21,7 @@ input{
 button{
     margin-top: 1px;
     border-radius: 2px;
-    width: 100px;
+    width: 147px;
     padding: 7px;
     background-color: #5f9341;
     color: white;
@@ -31,7 +36,10 @@ button:hover{
 #delete-btn{
     background-color: white;
     color: #5f9341;
-
+}
+#delete-btn:hover{
+    background-color: #d34a49;
+    color: white;
 }
 
 ul{
